@@ -319,18 +319,6 @@ def main():
     Main function. Handles exceptions.
     """
     try:
-        # Checking that both input files have the same number of timesteps
-        #  timestepsCOM = tsCountCOM(comfile)
-        #  timestepsXYZ = tsCountXYZ(xyzfile)
-        #  isEqual(timestepsCOM, timestepsXYZ)
-        #  com_gen = readCOM(comfile)
-        #  xyz_gen = micelle.read()
-        #  with open(outfile, 'w') as f:
-        #      for com_coords, xyz_coords in zip(com_gen, xyz_gen):
-        #          #  new_coords
-        #          #  f.write(new_coords)
-        #          f.write("")
-        #          break
         print("Loading files.")
         micelle = XYZ(xyzfile)
         print(f"Micelle -- {micelle}")

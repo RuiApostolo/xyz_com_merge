@@ -9,7 +9,7 @@
 # set micelle atom types
 set micelle_names "not type 8 9 10"
 # load trajectory file
-mol new ../rg/dump.trimmed.lammpstrj type lammpstrj waitfor all autobonds off
+mol new dump.trimmed.lammpstrj type lammpstrj waitfor all autobonds off
 # set start
 set ts_start 0
 # end of last range (relative to dump file start, first timestep is always 0)
@@ -18,40 +18,6 @@ set ts_stop [expr [molinfo top get numframes] - 1]
 set ts_skip 1
 # COM coordinate file name
 set com_file "com.dat"
-
-###############################################################################
-#                            ATOM TYPE ATTRIBUTION                            #
-###############################################################################
-# set atom_names {
-#   { c_names   {name 1 to 7 }   }
-#   { h_names   {name 11 to 14 } }
-#   { o_names   {name 15 to 17 } }
-#   { dcc_names {name 8 9 }      }
-#   { dhh_names {name 10 }       }
-# }
-
-#######################
-#  GMO all atom OPLS  #
-#######################
-#  CARBONS  #
-#############
-# set carbons [atomselect top [lindex [lindex $atom_names 0] 1] ]
-# $carbons set mass 12.011
-# $carbons set element C
-
-#############
-# HYDROGENS #
-#############
-# set hydrogens [atomselect top [lindex [lindex $atom_names 1] 1] ]
-# $hydrogens set mass 1.008
-# $hydrogens set element H
-
-###########
-# OXYGENS #
-###########
-# set oxygens [atomselect top [lindex [lindex $atom_names 2] 1] ]
-# $oxygens set mass 15.999
-# $oxygens set element O
 
 ###############################################################################
 #                         END OF EDITABLE PARAMETERS                          #
