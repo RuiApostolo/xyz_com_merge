@@ -45,7 +45,7 @@ class XYZ:
         return item
 
     def __str__(self):
-        return f"File: {self.filename}, steps: {self.numsteps}, molSize: {self.size}" #noqa
+        return f"File: {self.filename}, steps: {self.numsteps}, molSize: {self.size}"  # noqa
 
     def tsCount(self, filename: str) -> int:
         """
@@ -334,24 +334,41 @@ separated by whitespace and the same number of lines as the number of
 timesteps in the .xyz file.
 """
 
-parser = argparse.ArgumentParser(description=prog_desc)
-parser.add_argument('--inxyz',
-                    default='./micelle.xyz',
-                    help='The name of the .xyz file.'
-                    )
-parser.add_argument('--indat',
-                    type=str,
-                    default='./com.dat',
-                    help='The name of the .dat file.'
-                    )
-parser.add_argument('--out',
-                    default='./xyz_with_com.xyz',
-                    help='The name of the output .xyz file.'
-                    )
-parser.add_argument('--atomtype',
-                    default='X',
-                    help='The name for the .dat atomtype.'
-                    )
+parser = argparse.ArgumentParser(
+    description=prog_desc,
+    add_help=False,
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+required = parser.add_argument_group('required arguments')
+optional = parser.add_argument_group('optional arguments')
+required.add_argument('-i1',
+                      '--inxyz',
+                      required=True,
+                      default=argparse.SUPPRESS,
+                      help='The name of the .xyz file.'
+                      )
+required.add_argument('-i2',
+                      '--indat',
+                      required=True,
+                      default=argparse.SUPPRESS,
+                      help='The name of the .dat file.'
+                      )
+optional.add_argument('-h',
+                      '--help',
+                      action='help',
+                      default=argparse.SUPPRESS,
+                      help='show this help message and exit'
+                      )
+optional.add_argument('-o',
+                      '--out',
+                      default='./xyz_with_com.xyz',
+                      help='The name of the output .xyz file.'
+                      )
+optional.add_argument('-a',
+                      '--atomtype',
+                      default='X',
+                      help='The name for the .dat atomtype.'
+                      )
 args = parser.parse_args()
 
 
