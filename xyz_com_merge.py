@@ -4,9 +4,8 @@ xyz_com_merge.py
 Created by Rui Apóstolo
 Version 1.0 August 2021
 This script merges an xyz file with a com.dat file with coordinates for a COM
-Initially intended to be used with a VMD tcl/tk script that calculates
-the COM for a micelle and writes the COM coordinates as a com.dat file
-with the structure:
+Intended to be used with a VMD tcl/tk script that calculates the COM for a
+micelle and writes the COM coordinates as a com.dat file with the structure:
     {x} {y} {z}
     number of lines: number of timesteps
 Result is a merged xyz file.
@@ -320,14 +319,14 @@ def main():
     """
     try:
         print("Loading files.")
-        micelle = XYZ(xyzfile)
-        print(f"Micelle -- {micelle}")
+        loadedxyz = XYZ(xyzfile)
+        print(f"XYZ file -- {loadedxyz}")
         com = COM(comfile)
-        print(f"COM -- {com}")
+        print(f"COM file -- {com}")
         print("Merging files.")
-        micelle_with_com = micelle.merge(com)
+        xyz_with_com = loadedxyz.merge(com)
         print(f"Saving file {outfile}.")
-        micelle_with_com.save(outfile)
+        xyz_with_com.save(outfile)
         return
 
     except TypeError as err:
