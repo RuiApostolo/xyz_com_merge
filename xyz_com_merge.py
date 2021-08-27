@@ -12,17 +12,7 @@ Result is a merged xyz file.
 """
 from mmap import mmap
 from copy import deepcopy
-
-###############################################################################
-#                             EDITABLE PARAMETERS                             #
-###############################################################################
-xyzfile = 'micelle.xyz'
-comfile = 'com.dat'
-outfile = 'micelle_with_com.xyz'
-
-###############################################################################
-#                         END OF EDITABLE PARAMETERS                          #
-###############################################################################
+import argparse
 
 
 class XYZ:
@@ -158,14 +148,13 @@ class XYZ:
             timestepsCOM = com.numsteps
             timestepsXYZ = self.numsteps
             isEqual(timestepsCOM, timestepsXYZ)
-
         except ValueError as err:
             raise ValueError from err
 
         new_xyz = deepcopy(self)
         new_xyz.size += 1
         for frame in self.frames:
-            self.frames[frame]['atoms'].append(com.frames[frame])
+            new_xyz.frames[frame]['atoms'].append(com.frames[frame])
 
         return new_xyz
 
@@ -240,7 +229,7 @@ class COM(list):
                 line = f.readline().split()
                 if not line:
                     break
-                new_atom = ATOM("X", line[0], line[1], line[2])
+                new_atom = ATOM(com_atom_type, line[0], line[1], line[2])
                 coords[indx] = new_atom
                 indx += 1
             return coords
@@ -321,10 +310,10 @@ def main():
         print("Loading files.")
         loadedxyz = XYZ(xyzfile)
         print(f"XYZ file -- {loadedxyz}")
-        com = COM(comfile)
-        print(f"COM file -- {com}")
+        loadedcom = COM(comfile)
+        print(f"COM file -- {loadedcom}")
         print("Merging files.")
-        xyz_with_com = loadedxyz.merge(com)
+        xyz_with_com = loadedxyz.merge(loadedcom)
         print(f"Saving file {outfile}.")
         xyz_with_com.save(outfile)
         return
@@ -337,6 +326,39 @@ def main():
         raise StopIteration from err
     return
 
+
+prog_desc = """
+This program merges an .xyz file with the normal syntax with an .dat file.
+The .dat file must have one group of coordinates per line, with {x, y, and z}
+separated by whitespace and the same number of lines as the number of
+timesteps in the .xyz file.
+"""
+
+parser = argparse.ArgumentParser(description=prog_desc)
+parser.add_argument('--inxyz',
+                    default='./micelle.xyz',
+                    help='The name of the .xyz file.'
+                    )
+parser.add_argument('--indat',
+                    type=str,
+                    default='./com.dat',
+                    help='The name of the .dat file.'
+                    )
+parser.add_argument('--out',
+                    default='./xyz_with_com.xyz',
+                    help='The name of the output .xyz file.'
+                    )
+parser.add_argument('--atomtype',
+                    default='X',
+                    help='The name for the .dat atomtype.'
+                    )
+args = parser.parse_args()
+
+
+xyzfile = args.inxyz
+comfile = args.indat
+outfile = args.out
+com_atom_type = args.atomtype
 
 if __name__ == '__main__':
     main()
